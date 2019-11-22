@@ -75,6 +75,7 @@ void  ArmRaise(int Level, int Speed){
 		while(true){
 			setMotorSpeed(Arm, -Speed);
 			if(getMotorEncoder(Arm)<=iArmLv[Level]){
+				setMotorSpeed(Arm, 0);
 				break;
 			}
 		}
@@ -83,6 +84,7 @@ void  ArmRaise(int Level, int Speed){
 		while(true){
 			setMotorSpeed(Arm, Speed);
 			if(getMotorEncoder(Arm)>=iArmLv[Level]){
+				setMotorSpeed(Arm, 0);
 				break;
 			}
 		}
