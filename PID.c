@@ -14,13 +14,13 @@ void StraightDistance(float BaseSpeed, float Kp, int heading, float distanceCm, 
 	resetMotorEncoder(LeftMotor);
 	resetMotorEncoder(RightMotor);
 	setMotorEncoderUnits(encoderDegrees);
-	distanceCm = distanceCm/360*20*GearRatio;
-	HoldZone = HoldZone/360*20*GearRatio;
+	distanceCm = distanceCm/360.0*20.0*GearRatio;
+	HoldZone = HoldZone/360.0*20.0*GearRatio;
 
 	while(true){
 		int error = getGyroDegrees(port9)-heading;
 		float MotorInput = error*Kp;
-		float dis = ((((getMotorEncoder(LeftMotor)/360)*20)*GearRatio)+(((getMotorEncoder(RightMotor)/360)*20)*GearRatio))/2;
+		float dis = ((((getMotorEncoder(LeftMotor)/360.0)*20.0)*GearRatio)+(((getMotorEncoder(RightMotor)/360.0)*20.0)*GearRatio))/2;
 		int TheSpeedLeft = BaseSpeed+MotorInput;
 		int TheSpeedRight = BaseSpeed-MotorInput;
 		int FESL = EndSpeed+MotorInput;
@@ -50,7 +50,7 @@ void StraightDistance(float BaseSpeed, float Kp, int heading, float distanceCm, 
 			}
 		}
 		else{
-	 		if(BaseSpeed>20){
+	 		if(BaseSpeed<20){
 				setMotorSpeed (LeftMotor, (20)+MotorInput);
 				setMotorSpeed (RightMotor, (20)-MotorInput);
 			}else{
@@ -99,6 +99,7 @@ void toggleclaw(){
 		setMotorSpeed(Claw, -100);
 			while(true){
 				if(getMotorEncoder(Claw)<10){
+					setMotorSpeed(Claw, 0);
 					break;
 				}
 			}
@@ -106,6 +107,7 @@ void toggleclaw(){
 		setMotorSpeed(Claw, 100);
 		while(true){
 		if(getMotorEncoder(Claw)>80){
+			setMotorSpeed(Claw, 0);
 			break;
 		}
 	}
@@ -138,7 +140,7 @@ task main(){
 	resetMotorEncoder(Arm);
 	killallmotors();
 	waitLED();
-	//BaseSpeed, Kp, heading, distanceCm, /*float SlowDownZone,*/ float HoldZone, float EndSpeed, float GearRatio
+	//BaseSpeed, Kp, heading, distanceCm, HoldZone, EndSpeed, GearRatio
 	StraightDistance(50, 0.4 ,0,100, 30, 10, 1.5);
 	ArmRaise(3, 50);
 	toggleclaw();
